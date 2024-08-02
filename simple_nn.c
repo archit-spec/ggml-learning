@@ -12,18 +12,18 @@ int main(int argc, char ** argv) {
         .mem_buffer = NULL,
     };
 
-    // initialize the memory allocator
+    // initializing the memory allocator
     struct ggml_context * ctx = ggml_init(params);
 
-    // create the weights for the hidden layer
+    // creating the weights for the hidden layer
     struct ggml_tensor * w1 = ggml_new_tensor_2d(ctx, GGML_TYPE_F32, N_INPUTS, N_HIDDEN);
     struct ggml_tensor * b1 = ggml_new_tensor_1d(ctx, GGML_TYPE_F32, N_HIDDEN);
 
-    // create the weights for the output layer
+    // creating the weights for the output layer
     struct ggml_tensor * w2 = ggml_new_tensor_2d(ctx, GGML_TYPE_F32, N_HIDDEN, N_OUTPUTS);
     struct ggml_tensor * b2 = ggml_new_tensor_1d(ctx, GGML_TYPE_F32, N_OUTPUTS);
 
-    // initialize the weights with random values
+    // initializing the weights with random values
     for (int i = 0; i < ggml_nelements(w1); i++) {
         ((float *)w1->data)[i] = (float)rand() / RAND_MAX;
     }
@@ -47,11 +47,9 @@ int main(int argc, char ** argv) {
     hidden = ggml_relu(ctx, hidden);
     struct ggml_tensor * output = ggml_add(ctx, ggml_mul_mat(ctx, w2, hidden), b2);
 
-    // print the output
     float * out = ggml_get_data_f32(output);
     printf("Output: %f\n", out[0]);
 
-    // free the memory
     ggml_free(ctx);
 
     return 0;
